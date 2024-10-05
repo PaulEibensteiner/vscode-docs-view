@@ -12,6 +12,7 @@ VS Code extension that displays hover documentation in the sidebar or panel.
 - Language independent. Works in any language that supports hovers.
 - The "Documentation" view shows in the panel by default. Move to other views or the panel just by dragging.
 - Supports syntax highlighting and markdown rendering in the docs view.
+- As opposed to the hover view it supports math rendering.
 
 ## Configuration
 
@@ -24,3 +25,7 @@ VS Code extension that displays hover documentation in the sidebar or panel.
 
 - `Pin current docs` — Stop live updating of the docs view. Keeps the currently visible docs. 
 - `Unpin current docs` — Make the docs view start tracking the cursor again.
+
+## Math rendering
+
+For math rendering the extension relies on the language server to return math blocks in a symbol's documentation. E.g. Pylance returns code blocks instead of math when reST is used for the docstring, therefore math rendering will not work. One can prevent this by either using the Jedi language server (by the `python.languageServer` setting) or by using markdown delimiters (`$` or `$$`) for math equations.
