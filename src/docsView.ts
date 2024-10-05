@@ -112,6 +112,7 @@ export class DocsViewViewProvider implements vscode.WebviewViewProvider {
 	private _getHtmlForWebview(webview: vscode.Webview) {
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
 		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
+		const externalStyleUri = "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
 
 		const nonce = getNonce();
 
@@ -122,13 +123,14 @@ export class DocsViewViewProvider implements vscode.WebviewViewProvider {
 
 				<meta http-equiv="Content-Security-Policy" content="
 					default-src 'none';
-					style-src ${webview.cspSource} 'unsafe-inline';
+					style-src ${webview.cspSource} 'unsafe-inline' https://cdn.jsdelivr.net;
 					script-src 'nonce-${nonce}';
 					img-src data: https:;
 					">
 
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+				<link rel="stylesheet" href="${externalStyleUri}">
 				<link href="${styleUri}" rel="stylesheet">
 				
 				<title>Documentation View</title>

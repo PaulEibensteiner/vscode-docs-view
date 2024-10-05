@@ -1,8 +1,10 @@
 import DOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
-import { Marked } from "marked";
 import * as vscode from 'vscode';
 import { CodeHighlighter } from './codeHighlighter';
+import markdownIt from 'markdown-it'
+import texmath from 'markdown-it-texmath'
+import katex from 'katex'
 
 export class Renderer {
 
@@ -40,14 +42,15 @@ export class Renderer {
 
 		const markdown = parts.join('\n---\n');
 
-		const highlight = await this._highlighter.getHighlighter(document);
-		const marked = new Marked({
-			renderer: {
-				code: (code: string, infostring: string | undefined, _escaped: boolean) => highlight(code, infostring ?? '')
-			}
+		const highlight_function = await this._highlighter.getHighlighter(document);
+		const md = markdownIt({
+			highlight: highlight_function
+		}).use(texmath, {
+			engine: katex,
+			delimiters: 'dollars',
 		});
 
-		const renderedMarkdown = await marked.parse(markdown, {});
+		const renderedMarkdown = md.render(markdown)
 		return this._purify.sanitize(renderedMarkdown, { USE_PROFILES: { html: true } });
 	}
 
