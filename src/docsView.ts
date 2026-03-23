@@ -6,6 +6,8 @@ enum UpdateMode {
 	Sticky = 'sticky',
 }
 
+const DEFAULT_FONTSIZE = 12
+
 export class DocsViewViewProvider implements vscode.WebviewViewProvider {
 
 	public static readonly viewType = 'docsView.documentation';
@@ -21,6 +23,7 @@ export class DocsViewViewProvider implements vscode.WebviewViewProvider {
 	private _loading?: { cts: vscode.CancellationTokenSource };
 
 	private _updateMode = UpdateMode.Live;
+	private _fontSize = DEFAULT_FONTSIZE;
 	private _pinned = false;
 
 	constructor(
@@ -40,6 +43,10 @@ export class DocsViewViewProvider implements vscode.WebviewViewProvider {
 
 		vscode.workspace.onDidChangeConfiguration(() => {
 			this.updateConfiguration();
+			if (this._view) {
+				// Explicitly set the updated HTML with new font size to trigger re-render
+				this._view.webview.html = this._getHtmlForWebview(this._view.webview);
+			}
 		}, null, this._disposables);
 
 		this.updateConfiguration();
@@ -132,6 +139,11 @@ export class DocsViewViewProvider implements vscode.WebviewViewProvider {
 
 				<link rel="stylesheet" href="${externalStyleUri}">
 				<link href="${styleUri}" rel="stylesheet">
+				<style>
+						body {
+								font-size: ${this._fontSize}px;
+						}
+				</style>
 				
 				<title>Documentation View</title>
 			</head>
@@ -234,6 +246,7 @@ export class DocsViewViewProvider implements vscode.WebviewViewProvider {
 	private updateConfiguration() {
 		const config = vscode.workspace.getConfiguration('docsView');
 		this._updateMode = config.get<UpdateMode>('documentationView.updateMode') || UpdateMode.Live;
+		this._fontSize = config.get<number>('documentationView.fontSize') || DEFAULT_FONTSIZE;
 	}
 }
 

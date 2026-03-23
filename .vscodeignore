@@ -1,13 +1,12 @@
 .vscode
-design
-node_modules
+design/**
 package-json.lock
 tsconfig.json
+webpack.config.js
+.gitignore
+.git
 webpack.config.js
 
 **/*.ts
 **/*.map
 
-# Explicitly include non-bundled node_modules
-!node_modules
-node_modules/marked

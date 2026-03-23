@@ -4,7 +4,9 @@ import * as vscode from 'vscode';
 import { CodeHighlighter } from './codeHighlighter';
 import markdownIt from 'markdown-it'
 import texmath from 'markdown-it-texmath'
+import toc from 'markdown-it-table-of-contents'
 import katex from 'katex'
+// import {Marked} from 'marked'
 
 export class Renderer {
 
@@ -40,17 +42,31 @@ export class Renderer {
 			return '';
 		}
 
-		const markdown = parts.join('\n---\n');
+		const markdowna = parts.join('\n---\n');
+		const markdown = markdowna.replace(/\\/g, '');
+		console.log(markdowna)
 
 		const highlight_function = await this._highlighter.getHighlighter(document);
 		const md = markdownIt({
-			highlight: highlight_function
+			highlight: highlight_function,
+			html: true,
+			xhtmlOut: false,
+			breaks: false,
+			linkify: true,
+			typographer: false
 		}).use(texmath, {
 			engine: katex,
 			delimiters: 'dollars',
-		});
-
+		}).use(toc);
 		const renderedMarkdown = md.render(markdown)
+
+		/* const marked = new Marked({
+			renderer: {
+				code: (code: string, infostring: string | undefined, _escaped: boolean) => highlight_function(code, infostring ?? '')
+			}
+		});
+		const marked_markdown = await marked.parse(markdown, {}); */
+
 		return this._purify.sanitize(renderedMarkdown, { USE_PROFILES: { html: true } });
 	}
 

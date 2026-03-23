@@ -2,9 +2,6 @@ body {
 	word-wrap: break-word;
 	margin: 1em 0;
 	padding: 0;
-
-	font-size: 12px;
-	line-height: 17px;
 }
 pre.shiki {
 	background: none !important;

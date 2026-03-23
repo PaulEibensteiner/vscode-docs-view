@@ -96,6 +96,11 @@
 						"The documentation view tracks the current cursor position. Display empty content if no documentation is found at the current position.",
 						"The documentation view tries to show the documentation at the current cursor position. If there is none, it continues showing the last available documentation."
 					]
+				},
+				"docsView.documentationView.fontSize": {
+					"type": "number",
+					"default": 12,
+					"description": "Controls the font size in the documentation view."
 				}
 			}
 		}
@@ -112,7 +117,9 @@
 		"json5": "^2.1.3",
 		"katex": "^0.16.11",
 		"markdown-it": "^14.1.0",
+		"markdown-it-table-of-contents": "^0.8.0",
 		"markdown-it-texmath": "^1.0.0",
+		"marked": "^14.1.2",
 		"oniguruma": "^7.2.1",
 		"shiki": "^0.14.7"
 	},
